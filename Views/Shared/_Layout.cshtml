@@ -1,0 +1,101 @@
+@using QL_CUA_HANG_BAN_XE_DAP.Data
+@using QL_CUA_HANG_BAN_XE_DAP.Models
+@inject AppDbContext _db
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Bike World</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { margin: 0; font-family: Arial; background: #f5f5f5; }
+
+        header {
+            background: #2c3e50;
+            color: white;
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        header .logo { color: white; text-decoration: none; font-size: 18px; font-weight: bold; }
+        header .nav-right > a { color: white; text-decoration: none; margin-left: 15px; }
+
+        /* Dropdown */
+        .nav-menu { position: relative; display: inline-block; margin-left: 15px; }
+        .nav-menu > a {
+            color: white; text-decoration: none; cursor: pointer;
+            padding: 5px 0;
+        }
+        .dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            min-width: 220px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            border-radius: 4px;
+            z-index: 999;
+            padding: 8px 0;
+        }
+        .dropdown strong {
+            display: block;
+            padding: 8px 20px 6px;
+            color: #222;
+            font-size: 13px;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 4px;
+        }
+        .dropdown a {
+            display: block;
+            padding: 7px 20px;
+            color: #333 !important;
+            text-decoration: none;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+        .dropdown a:hover { background: #f0f0f0; color: #e74c3c !important; }
+        .nav-menu:hover .dropdown { display: block; }
+
+        footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <a class="logo" href="/Product">🚴 BIKE WORLD</a>
+    <div class="nav-right">
+        <div class="nav-menu" style="display:inline-block">
+            <a href="/Product">Sản phẩm ▾</a>
+            <div class="dropdown">
+                <strong style="display:block; padding:8px 20px; color:#333; font-size:13px;">XE ĐẠP</strong>
+                <a href="/Product/ByCategory/1">Xe đạp thể thao đường phố</a>
+                <a href="/Product/ByCategory/2">Xe đạp địa hình</a>
+                <a href="/Product/ByCategory/3">Xe đạp đua</a>
+                <a href="/Product/ByCategory/4">Xe đạp gấp</a>
+                <a href="/Product/ByCategory/5">Xe đạp trẻ em</a>
+                <a href="/Product/ByCategory/6">Xe đạp fixed gear</a>
+            </div>
+        </div>
+        <a href="/Auth/Login">Đăng nhập</a>
+    </div>
+</header>
+
+<div>
+    @RenderBody()
+</div>
+
+<footer>
+    © 2026 Bike World
+</footer>
+
+</body>
+</html>

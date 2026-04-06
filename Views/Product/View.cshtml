@@ -1,0 +1,19 @@
+@model QL_CUA_HANG_BAN_XE_DAP.Models.Product
+
+<h2>Sửa sản phẩm</h2>
+
+<form method="post">
+    <input type="hidden" name="Id" value="@Model.Id" />
+
+    <input name="Name" value="@Model.Name" /><br /><br />
+
+    <input name="Price" value="@Model.Price" /><br /><br />
+
+    <input name="Image" value="@Model.Image" /><br /><br />
+
+    <input name="Description" value="@Model.Description" /><br /><br />
+
+    <input name="CategoryId" value="@Model.CategoryId" /><br /><br />
+
+    <button type="submit">Cập nhật</button>
+</form>

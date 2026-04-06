@@ -1,0 +1,51 @@
+@model QL_CUA_HANG_BAN_XE_DAP.Models.Product
+
+<style>
+    .detail-container {
+        display: flex;
+        gap: 30px;
+        padding: 40px;
+    }
+
+    .detail-img {
+        width: 400px;
+    }
+
+    .detail-img img {
+        width: 100%;
+        border-radius: 10px;
+    }
+
+    .detail-info {
+        flex: 1;
+    }
+
+    .price {
+        color: red;
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    .btn-back {
+        margin-top: 20px;
+        display: inline-block;
+        padding: 10px 20px;
+        background: black;
+        color: white;
+        text-decoration: none;
+    }
+</style>
+
+<div class="detail-container">
+    <div class="detail-img">
+        <img src="@Model.Image" />
+    </div>
+
+    <div class="detail-info">
+        <h2>@Model.Name</h2>
+        <p class="price">@Model.Price VNĐ</p>
+        <p>@Model.Description</p>
+
+        <a href="/Product" class="btn-back">⬅ Quay lại</a>
+    </div>
+</div>

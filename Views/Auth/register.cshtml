@@ -1,0 +1,194 @@
+
+@{
+    Layout = null;
+}<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng ký | Bike World</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #e74c3c; /* Màu đỏ thể thao */
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            /* Sử dụng ảnh từ thư mục nội bộ của bạn */
+            background: 
+            linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+            url('/images/register.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .register-container {
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            padding: 35px;
+            width: 100%;
+            max-width: 420px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            color: white;
+            text-align: center;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .logo-icon {
+            font-size: 40px;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            margin: 0 0 5px 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 800;
+        }
+
+        p.subtitle {
+            margin-bottom: 25px;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #ddd;
+            font-size: 14px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 15px 12px 45px;
+            box-sizing: border-box;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 30px;
+            color: white;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        input:focus {
+            border-color: var(--primary-color);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        button {
+            width: 100%;
+            padding: 13px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 30px;
+            background: var(--primary-color);
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: 0.4s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        button:hover {
+            background: #c0392b;
+            transform: scale(1.02);
+            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
+        }
+
+        .footer-links {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-color);
+        }
+
+        @@keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="register-container">
+        <div class="logo-icon">
+            <i class="fas fa-bicycle"></i>
+        </div>
+        <h2>HÃY GIA NHẬP CÙNG BIKE WORD </h2>
+        <p class="subtitle">Tạo tài khoản để nhận ưu đãi phụ kiện</p>
+
+        <form method="post">
+            <div class="input-group">
+                <i class="fas fa-user"></i>
+                <input name="Username" placeholder="Tên đăng nhập" required />
+            </div>
+
+            <div class="input-group">
+                <i class="fas fa-envelope"></i>
+                <input name="email" type="email" placeholder="Email" required />
+            </div>
+
+            <div class="input-group">
+                <i class="fas fa-phone"></i>
+                <input name="phone" type="tel" placeholder="Số điện thoại" required />
+            </div>
+
+            <div class="input-group">
+                <i class="fas fa-lock"></i>
+                <input name="Password" type="password" placeholder="Mật khẩu" required />
+            </div>
+
+            <div class="input-group">
+                <i class="fas fa-check-double"></i>
+                <input name="confirmPassword" type="password" placeholder="Xác nhận mật khẩu" required />
+            </div>
+
+            <button type="submit">
+                Đăng ký ngay <i class="fas fa-user-plus"></i>
+            </button>
+        </form>
+
+        <div class="footer-links">
+            <a href="/Auth/Login">Đã là thành viên? <strong>Đăng nhập</strong></a>
+        </div>
+    </div>
+
+</body>
+</html>
