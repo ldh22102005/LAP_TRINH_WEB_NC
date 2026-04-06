@@ -1,76 +1,144 @@
 @model List<QL_CUA_HANG_BAN_XE_DAP.Models.Product>
 
 <style>
+    /* 1. KHUNG CHỨA CHÍNH */
     .main-content {
         max-width: 1200px;
-        margin: 20px auto;
+        margin: 30px auto;
         padding: 0 15px;
     }
-    .search-box { margin-bottom: 20px; }
-    .search-box input {
-        padding: 8px 12px;
-        width: 260px;
-        border: 1px solid #ddd;
-        border-radius: 4px 0 0 4px;
-        outline: none;
+
+    /* 2. TIÊU ĐỀ TRANG (Đã căn giữa) */
+    .page-title { 
+        font-size: 28px; 
+        font-weight: 700; 
+        margin-bottom: 35px; 
+        text-align: center; /* Căn giữa tiêu đề */
+        color: #1a1a1a;
+        text-transform: uppercase;
+        position: relative;
+        padding-bottom: 15px;
     }
-    .search-box button {
-        padding: 8px 16px;
-        background: #e74c3c;
-        color: white;
-        border: none;
-        border-radius: 0 4px 4px 0;
-        cursor: pointer;
+
+    /* Tạo gạch chân nhỏ dưới tiêu đề cho đẹp */
+    .page-title::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 3px;
+        background: #3b39fd; /* Màu xanh chủ đạo */
     }
-    .page-title { font-size: 26px; font-weight: bold; margin-bottom: 20px; }
+
+    /* 3. LƯỚI SẢN PHẨM (Grid) */
     .product-grid {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 24px;
+        grid-template-columns: repeat(4, 1fr); /* Đổi thành 4 cột cho chuyên nghiệp */
+        gap: 25px;
     }
+
+    /* 4. THẺ SẢN PHẨM (Card) */
     .product-card {
         background: white;
-        border-radius: 8px;
+        border-radius: 12px;
         overflow: hidden;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
         text-decoration: none;
-        color: black;
-        transition: 0.2s;
-        padding-bottom: 16px;
+        color: #333;
+        transition: all 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        border: 1px solid #f0f0f0;
     }
-    .product-card:hover { transform: translateY(-4px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
-    .product-card img { width: 100%; height: 220px; object-fit: cover; }
-    .info { padding: 12px 16px; font-size: 14px; }
-    .info .name { font-size: 15px; margin-bottom: 8px; line-height: 1.4; }
-    .price { color: #e74c3c; font-weight: bold; font-size: 16px; }
+
+    .product-card:hover { 
+        transform: translateY(-8px); 
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
+        border-color: #3b39fd;
+    }
+
+    /* Ảnh sản phẩm */
+    .product-card img { 
+        width: 100%; 
+        height: 200px; 
+        object-fit: cover; 
+        transition: transform 0.5s ease;
+    }
+    
+    .product-card:hover img {
+        transform: scale(1.05);
+    }
+
+    /* Thông tin chữ */
+    .info { 
+        padding: 15px; 
+        text-align: center; /* Căn giữa tên và giá */
+    }
+
+    .info .name { 
+        font-size: 15px; 
+        font-weight: 600;
+        margin-bottom: 10px; 
+        line-height: 1.4;
+        height: 42px; /* Giới hạn độ cao để các card đều nhau */
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+    }
+
+    .price { 
+        color: #e74c3c; /* Màu đỏ nổi bật cho giá tiền */
+        font-weight: 700; 
+        font-size: 17px; 
+    }
+
+    /* 5. THÔNG BÁO TRỐNG */
+    .empty-state {
+        text-align: center;
+        color: #999;
+        margin-top: 50px;
+        font-size: 1.1rem;
+    }
+
+    /* Responsive cho điện thoại */
+    @@media (max-width: 992px) {
+        .product-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @@media (max-width: 768px) {
+        .product-grid { grid-template-columns: repeat(2, 1fr); }
+    }
 </style>
 
 <div class="main-content">
-    <div class="page-title">@(ViewBag.CategoryName ?? "Danh sách sản phẩm")</div>
-
-    <div class="search-box">
-        <form method="get" action="/Product">
-            <input type="text" name="keyword" placeholder="Tìm sản phẩm..."
-                   value="@Context.Request.Query["keyword"]" />
-            <button type="submit">Tìm</button>
-        </form>
-    </div>
+    
+    <h1 class="page-title">
+        @(ViewBag.CategoryName ?? "Danh sách sản phẩm")
+    </h1>
 
     <div class="product-grid">
-        @foreach (var item in Model)
+        @if (Model != null && Model.Any())
         {
-            <a href="/Product/Detail/@item.Id" class="product-card">
-                <img src="@item.Image" alt="@item.Name" />
-                <div class="info">
-                    <div class="name">@item.Name</div>
-                    <div class="price">@item.Price.ToString("N0") VNĐ</div>
-                </div>
-            </a>
+            @foreach (var item in Model)
+            {
+                <a href="/Product/Detail/@item.Id" class="product-card">
+                    <img src="@item.Image" alt="@item.Name" />
+                    <div class="info">
+                        <div class="name">@item.Name</div>
+                        <div class="price">@item.Price.ToString("N0") VNĐ</div>
+                    </div>
+                </a>
+            }
         }
     </div>
 
-    @if (!Model.Any())
+    @if (Model == null || !Model.Any())
     {
-        <p style="color:#999; margin-top:30px;">Không có sản phẩm nào.</p>
+        <div class="empty-state">
+            <i class="fas fa-box-open" style="font-size: 3rem; margin-bottom: 15px;"></i>
+            <p>Hiện tại không có sản phẩm nào trong danh mục này.</p>
+        </div>
     }
 </div>

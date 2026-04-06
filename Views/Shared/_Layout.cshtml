@@ -3,99 +3,255 @@
 @inject AppDbContext _db
 
 <!DOCTYPE html>
-<html>
+<html lang="vi">
 <head>
     <meta charset="utf-8" />
-    <title>Bike World</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xe Đạp .VN - Bike World</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
     <style>
-        * { box-sizing: border-box; }
-        body { margin: 0; font-family: Arial; background: #f5f5f5; }
+        :root {
+            --primary-color: #3b39fd; /* Xanh tím xedap.vn */
+            --text-dark: #1e1e1e;
+            --text-light: #ffffff;
+            --bg-body: #f8f9fa;
+            --border-color: #e5e7eb;
+            --font-main: 'Inter', sans-serif;
+            --transition: all 0.3s ease;
+        }
 
-        header {
-            background: #2c3e50;
-            color: white;
-            padding: 15px 5%;
+        body {
+            margin: 0;
+            font-family: var(--font-main);
+            background-color: var(--bg-body);
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
+            min-height: 100vh;
         }
-        header .logo { color: white; text-decoration: none; font-size: 18px; font-weight: bold; }
-        header .nav-right > a { color: white; text-decoration: none; margin-left: 15px; }
 
-        /* Dropdown */
-        .nav-menu { position: relative; display: inline-block; margin-left: 15px; }
-        .nav-menu > a {
-            color: white; text-decoration: none; cursor: pointer;
-            padding: 5px 0;
+        /* --- TẦNG 1: HEADER CHÍNH --- */
+        .main-header {
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            padding: 12px 6%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 1001; /* Cao hơn dropdown */
         }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.6rem;
+            font-weight: 700;
+            text-decoration: none;
+            color: var(--text-light);
+        }
+
+        /* THANH TÌM KIẾM */
+        .search-container {
+            flex: 1;
+            max-width: 600px;
+            display: flex;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 0 30px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 10px 15px;
+            border: none;
+            outline: none;
+        }
+
+        .search-btn {
+            background: #f1f1f1;
+            border: none;
+            padding: 0 15px;
+            cursor: pointer;
+            color: #555;
+        }
+
+        /* ICON TIỆN ÍCH */
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-action-item {
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 1.4rem;
+            position: relative;
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -10px;
+            background: #ef4444;
+            color: white;
+            font-size: 0.7rem;
+            padding: 2px 6px;
+            border-radius: 10px;
+        }
+
+        /* --- TẦNG 2: NAV BAR & DROPDOWN --- */
+        .nav-bar {
+            background: white;
+            border-bottom: 1px solid var(--border-color);
+            padding: 0 6%;
+            display: flex;
+            justify-content: center;
+            position: sticky;
+            top: 65px; /* Nằm ngay dưới header khi scroll */
+            z-index: 1000;
+        }
+
+        .nav-menu-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            gap: 40px;
+        }
+
+        .nav-item {
+            position: relative; /* Quan trọng để dropdown bám vào */
+        }
+
+        .nav-link {
+            display: block;
+            padding: 15px 0;
+            text-decoration: none;
+            color: #333;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            border-bottom: 3px solid transparent;
+            transition: var(--transition);
+        }
+
+        .nav-item:hover .nav-link {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+
+        /* THIẾT KẾ DROPDOWN (Gộp từ file cũ của bạn) */
         .dropdown {
             display: none;
             position: absolute;
             top: 100%;
             left: 0;
             background: white;
-            min-width: 220px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            border-radius: 4px;
+            min-width: 250px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-radius: 0 0 8px 8px;
+            padding: 10px 0;
             z-index: 999;
-            padding: 8px 0;
         }
+
+        .nav-item:hover .dropdown {
+            display: block; /* Hiện khi rê chuột */
+        }
+
         .dropdown strong {
             display: block;
-            padding: 8px 20px 6px;
-            color: #222;
-            font-size: 13px;
-            border-bottom: 1px solid #eee;
-            margin-bottom: 4px;
+            padding: 10px 20px;
+            font-size: 11px;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
+
         .dropdown a {
             display: block;
-            padding: 7px 20px;
-            color: #333 !important;
+            padding: 10px 20px;
+            color: #333;
             text-decoration: none;
-            font-size: 14px;
-            line-height: 1.4;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: var(--transition);
         }
-        .dropdown a:hover { background: #f0f0f0; color: #e74c3c !important; }
-        .nav-menu:hover .dropdown { display: block; }
 
-        footer {
-            background: #2c3e50;
-            color: white;
-            text-align: center;
-            padding: 10px;
-            margin-top: 30px;
+        .dropdown a:hover {
+            background: #f8f9fa;
+            color: var(--primary-color);
+            padding-left: 25px; /* Hiệu ứng đẩy nhẹ khi hover */
         }
+
+        main { flex: 1; padding: 30px 6%; }
+        footer { background: #1a1a1a; color: #94a3b8; text-align: center; padding: 25px 0; }
     </style>
 </head>
+
 <body>
 
-<header>
-    <a class="logo" href="/Product">🚴 BIKE WORLD</a>
-    <div class="nav-right">
-        <div class="nav-menu" style="display:inline-block">
-            <a href="/Product">Sản phẩm ▾</a>
-            <div class="dropdown">
-                <strong style="display:block; padding:8px 20px; color:#333; font-size:13px;">XE ĐẠP</strong>
-                <a href="/Product/ByCategory/1">Xe đạp thể thao đường phố</a>
-                <a href="/Product/ByCategory/2">Xe đạp địa hình</a>
-                <a href="/Product/ByCategory/3">Xe đạp đua</a>
-                <a href="/Product/ByCategory/4">Xe đạp gấp</a>
-                <a href="/Product/ByCategory/5">Xe đạp trẻ em</a>
-                <a href="/Product/ByCategory/6">Xe đạp fixed gear</a>
-            </div>
+    <header class="main-header">
+        <a class="header-logo" href="/Product">
+            <i class="fas fa-bicycle"></i> <span>BIKE WORLD</span>
+        </a>
+
+        <form method="get" action="/Product/Index" class="search-container">
+            <input type="text" name="keyword" 
+                   value="@Context.Request.Query["keyword"]" 
+                   class="search-input" placeholder="Tìm kiếm sản phẩm..." />
+            <button type="submit" class="search-btn">
+                <i class="fas fa-search"></i>
+            </button>
+        </form>
+
+        <div class="user-actions">
+            <a href="#" class="user-action-item"><i class="far fa-bell"></i></a>
+            
+            <a href="/Cart" class="user-action-item">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="cart-badge">0</span>
+            </a>
+
+            <a href="/Auth/Login" class="user-action-item">
+                <i class="far fa-user-circle"></i>
+            </a>
         </div>
-        <a href="/Auth/Login">Đăng nhập</a>
-    </div>
-</header>
+    </header>
 
-<div>
-    @RenderBody()
-</div>
+    <nav class="nav-bar">
+        <ul class="nav-menu-list">
+            <li class="nav-item">
+                <a href="/Product" class="nav-link">SẢN PHẨM <i class="fas fa-chevron-down" style="font-size: 0.7rem;"></i></a>
+                <div class="dropdown">
+                    <strong>XE ĐẠP THEO DANH MỤC</strong>
+                    <a href="/Product/ByCategory/1">Xe đạp thể thao đường phố</a>
+                    <a href="/Product/ByCategory/2">Xe đạp địa hình</a>
+                    <a href="/Product/ByCategory/3">Xe đạp đua</a>
+                    <a href="/Product/ByCategory/4">Xe đạp gấp</a>
+                    <a href="/Product/ByCategory/5">Xe đạp trẻ em</a>
+                    <a href="/Product/ByCategory/6">Xe đạp fixed gear</a>
+                </div>
+            </li>
+            <li class="nav-item"><a href="#" class="nav-link">DỊCH VỤ</a></li>
+            <li class="nav-item"><a href="#" class="nav-link">KHUYẾN MÃI</a></li>
+            <li class="nav-item"><a href="#" class="nav-link">LIÊN HỆ</a></li>
+        </ul>
+    </nav>
 
-<footer>
-    © 2026 Bike World
-</footer>
+    <main>
+        @RenderBody()
+    </main>
+
+    <footer>
+        <p>© 2026 Bike World - Đẳng cấp trên từng cung đường</p>
+    </footer>
 
 </body>
 </html>
