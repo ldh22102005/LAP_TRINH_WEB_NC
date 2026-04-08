@@ -38,3 +38,4 @@ VALUES
 INSERT INTO Users (Username, Password, Email, Phone)
 VALUES 
 ('user1', '123', 'user1@gmail.com', '0123456789');
+
