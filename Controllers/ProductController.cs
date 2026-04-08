@@ -25,7 +25,7 @@ namespace QL_CUA_HANG_BAN_XE_DAP.Controllers
             }
 
             ViewBag.Categories = _context.Categories.ToList();
-            return View(list.ToList());
+            return View("IndexCart", list.ToList());
         }
 
         // ===== CHI TIẾT =====
@@ -38,7 +38,7 @@ namespace QL_CUA_HANG_BAN_XE_DAP.Controllers
                 return NotFound();
             }
 
-            return View(p);
+            return View("DetailCart", p);
         }
 
         // ===== THEO LOẠI =====
@@ -52,7 +52,7 @@ namespace QL_CUA_HANG_BAN_XE_DAP.Controllers
             ViewBag.Categories = _context.Categories.ToList();
             ViewBag.CurrentCategory = id;
             ViewBag.CategoryName = category?.Name;
-            return View("Index", list);
+            return View("IndexCart", list);
         }
 
         // ===== THÊM =====

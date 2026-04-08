@@ -1,0 +1,112 @@
+@model QL_CUA_HANG_BAN_XE_DAP.Models.Product
+
+<style>
+    .detail-container {
+        display: flex;
+        gap: 30px;
+        padding: 40px;
+        background: #fff;
+        border-radius: 18px;
+        box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+    }
+
+    .detail-img {
+        width: 400px;
+    }
+
+    .detail-img img {
+        width: 100%;
+        border-radius: 14px;
+        object-fit: cover;
+    }
+
+    .detail-info {
+        flex: 1;
+    }
+
+    .price {
+        color: #dc2626;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .success-message {
+        color: #166534;
+        font-weight: 600;
+        margin-top: 16px;
+    }
+
+    .cart-form {
+        margin-top: 24px;
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .cart-quantity {
+        width: 90px;
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+    }
+
+    .btn-cart,
+    .btn-back {
+        margin-top: 20px;
+        display: inline-block;
+        padding: 10px 20px;
+        color: white;
+        text-decoration: none;
+        border: none;
+        border-radius: 10px;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    .btn-cart {
+        background: #3b39fd;
+        margin-top: 0;
+    }
+
+    .btn-back {
+        background: black;
+    }
+
+    @@media (max-width: 900px) {
+        .detail-container {
+            flex-direction: column;
+            padding: 24px;
+        }
+
+        .detail-img {
+            width: 100%;
+        }
+    }
+</style>
+
+<div class="detail-container">
+    <div class="detail-img">
+        <img src="@Model.Image" alt="@Model.Name" />
+    </div>
+
+    <div class="detail-info">
+        <h2>@Model.Name</h2>
+        <p class="price">@Model.Price.ToString("N0") VNĐ</p>
+        <p>@Model.Description</p>
+
+        @if (TempData["Success"] != null)
+        {
+            <p class="success-message">@TempData["Success"]</p>
+        }
+
+        <form method="post" action="/Cart/AddToCart" class="cart-form">
+            <input type="hidden" name="productId" value="@Model.Id" />
+            <input type="hidden" name="returnUrl" value="@Context.Request.Path@Context.Request.QueryString" />
+            <input type="number" name="quantity" value="1" min="1" class="cart-quantity" />
+            <button type="submit" class="btn-cart">Thêm vào giỏ hàng</button>
+        </form>
+
+        <a href="/Product" class="btn-back">Quay lại</a>
+    </div>
+</div>
