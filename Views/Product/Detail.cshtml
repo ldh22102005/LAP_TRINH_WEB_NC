@@ -1,51 +1,204 @@
 @model QL_CUA_HANG_BAN_XE_DAP.Models.Product
 
 <style>
-    .detail-container {
-        display: flex;
-        gap: 30px;
+    .detail-wrapper {
+        max-width: 1100px;
+        margin: 30px auto;
+        background: white;
+        border-radius: 12px;
         padding: 40px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        display: flex;
+        gap: 50px;
     }
 
-    .detail-img {
-        width: 400px;
+    .detail-left {
+        width: 420px;
+        flex-shrink: 0;
     }
 
-    .detail-img img {
+    .detail-main-img {
         width: 100%;
         border-radius: 10px;
+        border: 1px solid #eee;
+        object-fit: cover;
     }
 
-    .detail-info {
+    .detail-right {
         flex: 1;
     }
 
-    .price {
-        color: red;
-        font-size: 24px;
-        font-weight: bold;
+    .detail-right h1 {
+        font-size: 1.6rem;
+        font-weight: 700;
+        color: #1e1e1e;
+        margin-bottom: 15px;
+        line-height: 1.4;
     }
 
-    .btn-back {
-        margin-top: 20px;
-        display: inline-block;
-        padding: 10px 20px;
-        background: black;
+    .price-old {
+        color: #999;
+        text-decoration: line-through;
+        font-size: 1rem;
+        margin-bottom: 4px;
+    }
+
+    .price-new {
+        color: #3b39fd;
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+
+    .detail-meta {
+        border-top: 1px solid #eee;
+        padding-top: 15px;
+        margin-bottom: 20px;
+    }
+
+    .detail-meta p {
+        margin: 8px 0;
+        font-size: 0.95rem;
+        color: #444;
+    }
+
+    .detail-meta span {
+        color: #3b39fd;
+        font-weight: 600;
+    }
+
+    .promo-box {
+        background: #f0f4ff;
+        border: 1px solid #c7d2fe;
+        border-radius: 8px;
+        padding: 15px 20px;
+        margin-bottom: 25px;
+    }
+
+    .promo-box .promo-title {
+        background: #3b39fd;
         color: white;
+        text-align: center;
+        font-weight: 700;
+        font-size: 0.85rem;
+        padding: 8px;
+        border-radius: 5px;
+        margin-bottom: 12px;
+        letter-spacing: 0.5px;
+    }
+
+    .promo-box ul {
+        margin: 0;
+        padding-left: 5px;
+        list-style: none;
+        font-size: 0.9rem;
+        color: #444;
+    }
+
+    .promo-box ul li {
+        margin-bottom: 6px;
+    }
+
+    .promo-box .promo-note {
+        font-style: italic;
+        color: #888;
+        font-size: 0.85rem;
+        margin-top: 10px;
+    }
+
+    .btn-group {
+        display: flex;
+        gap: 12px;
+        margin-top: 10px;
+    }
+
+    .btn-cart {
+        flex: 1;
+        padding: 13px;
+        background: #3b39fd;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        text-align: center;
         text-decoration: none;
+        transition: background 0.2s;
+    }
+
+    .btn-cart:hover { background: #2a28e0; }
+
+    .btn-back {
+        padding: 13px 20px;
+        background: #1e1e1e;
+        color: white;
+        border-radius: 8px;
+        text-decoration: none;
+        font-size: 0.95rem;
+        font-weight: 600;
+        transition: background 0.2s;
+    }
+
+    .btn-back:hover { background: #444; }
+
+    .description-section {
+        max-width: 1100px;
+        margin: 20px auto;
+        background: white;
+        border-radius: 12px;
+        padding: 30px 40px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    }
+
+    .description-section h3 {
+        font-size: 1.1rem;
+        font-weight: 700;
+        border-left: 4px solid #3b39fd;
+        padding-left: 12px;
+        margin-bottom: 15px;
+    }
+
+    .description-section p {
+        color: #555;
+        line-height: 1.8;
+        font-size: 0.95rem;
     }
 </style>
 
-<div class="detail-container">
-    <div class="detail-img">
-        <img src="@Model.Image" />
+<div class="detail-wrapper">
+    <div class="detail-left">
+        <img src="@Model.Image" alt="@Model.Name" class="detail-main-img" onerror="this.src='/images/no-image.jpg'" />
     </div>
 
-    <div class="detail-info">
-        <h2>@Model.Name</h2>
-        <p class="price">@Model.Price VNĐ</p>
-        <p>@Model.Description</p>
+    <div class="detail-right">
+        <h1>@Model.Name</h1>
 
-        <a href="/Product" class="btn-back">⬅ Quay lại</a>
+        <div class="price-new">@Model.Price.ToString("N0") VNĐ</div>
+
+        <div class="detail-meta">
+            <p>Thương hiệu: <span>@Model.Name.Split(' ')[4]</span></p>
+            <p>Danh mục: <span>@ViewBag.CategoryName</span></p>
+            <p>Tình trạng: <span>Còn hàng</span></p>
+        </div>
+
+        <div class="promo-box">
+            <div class="promo-title">KHUYẾN MÃI KHI MUA XE ĐẠP NÀY</div>
+            <ul>
+                <li>- Hỗ trợ phí vận chuyển khi đặt hàng Online (tuỳ theo giá trị đơn hàng).</li>
+                <li>- Liên hệ chăm sóc khách hàng để được tư vấn chi tiết.</li>
+            </ul>
+            <p class="promo-note">Lưu ý: không áp dụng đồng thời các Chương trình Khuyến mãi khác</p>
+        </div>
+
+        <div class="btn-group">
+            <a href="/Cart/Add/@Model.Id" class="btn-cart">🛒 Thêm vào giỏ hàng</a>
+            <a href="javascript:history.back()" class="btn-back">⬅ Quay lại</a>
+        </div>
     </div>
+</div>
+
+<div class="description-section">
+    <h3>Mô tả sản phẩm</h3>
+    <p>@Model.Description</p>
 </div>

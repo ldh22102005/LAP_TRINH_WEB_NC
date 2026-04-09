@@ -1,0 +1,227 @@
+@model QL_CUA_HANG_BAN_XE_DAP.Models.Cart
+
+<style>
+    .cart-page {
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+
+    .cart-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 24px;
+        gap: 16px;
+    }
+
+    .cart-title {
+        margin: 0;
+        font-size: 30px;
+        font-weight: 700;
+    }
+
+    .cart-alert {
+        margin-bottom: 20px;
+        padding: 14px 18px;
+        background: #dcfce7;
+        color: #166534;
+        border-radius: 12px;
+    }
+
+    .cart-layout {
+        display: grid;
+        grid-template-columns: 1.8fr 1fr;
+        gap: 24px;
+        align-items: start;
+    }
+
+    .cart-table,
+    .cart-summary,
+    .cart-empty {
+        background: #fff;
+        border-radius: 18px;
+        box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+        padding: 22px;
+    }
+
+    .cart-row {
+        display: grid;
+        grid-template-columns: 100px 1fr 180px 140px 60px;
+        gap: 16px;
+        align-items: center;
+        padding: 18px 0;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .cart-row:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+
+    .cart-image {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 14px;
+        background: #f8fafc;
+    }
+
+    .cart-name {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    .cart-price,
+    .cart-total {
+        font-weight: 600;
+        color: #dc2626;
+    }
+
+    .quantity-form {
+        display: flex;
+        gap: 8px;
+    }
+
+    .quantity-input {
+        width: 70px;
+        padding: 9px 10px;
+        border: 1px solid #d1d5db;
+        border-radius: 10px;
+    }
+
+    .btn {
+        border: none;
+        border-radius: 10px;
+        padding: 10px 14px;
+        cursor: pointer;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .btn-primary {
+        background: #3b39fd;
+        color: #fff;
+    }
+
+    .btn-danger {
+        background: #fee2e2;
+        color: #b91c1c;
+    }
+
+    .btn-light {
+        background: #f3f4f6;
+        color: #111827;
+    }
+
+    .summary-line {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 14px;
+        color: #374151;
+    }
+
+    .summary-line.total {
+        font-size: 22px;
+        font-weight: 700;
+        color: #111827;
+        padding-top: 14px;
+        border-top: 1px solid #e5e7eb;
+    }
+
+    .cart-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 18px;
+        flex-wrap: wrap;
+    }
+
+    .cart-empty {
+        text-align: center;
+        padding: 50px 24px;
+    }
+
+    .cart-empty h2 {
+        margin-bottom: 12px;
+    }
+
+    @@media (max-width: 900px) {
+        .cart-layout {
+            grid-template-columns: 1fr;
+        }
+
+        .cart-row {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<div class="cart-page">
+    <div class="cart-header">
+        <h1 class="cart-title">Giỏ hàng của bạn</h1>
+        <a href="/Product" class="btn btn-light">Tiếp tục mua sắm</a>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="cart-alert">@TempData["Success"]</div>
+    }
+
+    @if (Model.Items.Any())
+    {
+        <div class="cart-layout">
+            <div class="cart-table">
+                @foreach (var item in Model.Items)
+                {
+                    <div class="cart-row">
+                        <img src="@item.Image" alt="@item.ProductName" class="cart-image" />
+
+                        <div>
+                            <div class="cart-name">@item.ProductName</div>
+                            <div class="cart-total">Tạm tính: @item.TotalPrice.ToString("N0") VNĐ</div>
+                        </div>
+
+                        <div class="cart-price">@item.Price.ToString("N0") VNĐ</div>
+
+                        <form method="post" action="/Cart/UpdateQuantity" class="quantity-form">
+                            <input type="hidden" name="productId" value="@item.ProductId" />
+                            <input type="number" name="quantity" value="@item.Quantity" min="0" class="quantity-input" />
+                            <button type="submit" class="btn btn-primary">Cập nhật</button>
+                        </form>
+
+                        <form method="post" action="/Cart/Remove">
+                            <input type="hidden" name="productId" value="@item.ProductId" />
+                            <button type="submit" class="btn btn-danger">Xóa</button>
+                        </form>
+                    </div>
+                }
+            </div>
+
+            <div class="cart-summary">
+                <div class="summary-line">
+                    <span>Số lượng sản phẩm</span>
+                    <strong>@Model.TotalQuantity</strong>
+                </div>
+                <div class="summary-line total">
+                    <span>Tổng tiền</span>
+                    <span>@Model.TotalAmount.ToString("N0") VNĐ</span>
+                </div>
+
+                <div class="cart-actions">
+                    <form method="post" action="/Cart/Clear">
+                        <button type="submit" class="btn btn-danger">Xóa giỏ hàng</button>
+                    </form>
+                    <a href="/Product" class="btn btn-primary">Chọn thêm sản phẩm</a>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="cart-empty">
+            <h2>Giỏ hàng đang trống</h2>
+            <p>Hãy chọn một chiếc xe đạp phù hợp rồi thêm vào giỏ.</p>
+            <a href="/Product" class="btn btn-primary">Xem sản phẩm</a>
+        </div>
+    }
+</div>
