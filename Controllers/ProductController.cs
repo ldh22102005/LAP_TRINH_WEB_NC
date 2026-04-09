@@ -15,17 +15,22 @@ namespace QL_CUA_HANG_BAN_XE_DAP.Controllers
         }
 
         // ===== HIỂN THỊ + TÌM KIẾM =====
-        public IActionResult Index(string keyword)
+        public IActionResult Index(string keyword, int page = 1)
         {
+            int pageSize = 9;
             var list = _context.Products.AsQueryable();
 
             if (!string.IsNullOrEmpty(keyword))
-            {
                 list = list.Where(x => x.Name.Contains(keyword));
-            }
+
+            int total = list.Count();
+            var paged = list.Skip((page - 1) * pageSize).Take(pageSize).ToList();
 
             ViewBag.Categories = _context.Categories.ToList();
-            return View("IndexCart", list.ToList());
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = (int)Math.Ceiling((double)total / pageSize);
+            ViewBag.Keyword = keyword;
+            return View(paged);
         }
 
         // ===== CHI TIẾT =====
@@ -38,21 +43,28 @@ namespace QL_CUA_HANG_BAN_XE_DAP.Controllers
                 return NotFound();
             }
 
-            return View("DetailCart", p);
+            var category = _context.Categories.Find(p.CategoryId);
+            ViewBag.CategoryName = category?.Name;
+
+            return View(p);
         }
 
         // ===== THEO LOẠI =====
-        public IActionResult ByCategory(int id)
+        public IActionResult ByCategory(int id, int page = 1)
         {
+            int pageSize = 9;
             var category = _context.Categories.Find(id);
-            var list = _context.Products
-                .Where(x => x.CategoryId == id)
-                .ToList();
+            var list = _context.Products.Where(x => x.CategoryId == id);
+
+            int total = list.Count();
+            var paged = list.Skip((page - 1) * pageSize).Take(pageSize).ToList();
 
             ViewBag.Categories = _context.Categories.ToList();
             ViewBag.CurrentCategory = id;
             ViewBag.CategoryName = category?.Name;
-            return View("IndexCart", list);
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = (int)Math.Ceiling((double)total / pageSize);
+            return View("Index", paged);
         }
 
         // ===== THÊM =====

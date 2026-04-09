@@ -35,7 +35,7 @@
     /* 3. LƯỚI SẢN PHẨM (Grid) */
     .product-grid {
         display: grid;
-        grid-template-columns: repeat(4, 1fr); /* Đổi thành 4 cột cho chuyên nghiệp */
+        grid-template-columns: repeat(3, 1fr);
         gap: 25px;
     }
 
@@ -105,10 +105,47 @@
 
     /* Responsive cho điện thoại */
     @@media (max-width: 992px) {
-        .product-grid { grid-template-columns: repeat(3, 1fr); }
+        .product-grid { grid-template-columns: repeat(2, 1fr); }
     }
     @@media (max-width: 768px) {
-        .product-grid { grid-template-columns: repeat(2, 1fr); }
+        .product-grid { grid-template-columns: repeat(1, 1fr); }
+    }
+
+    /* PAGINATION */
+    .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+        margin-top: 40px;
+    }
+
+    .pagination a, .pagination span {
+        padding: 8px 14px;
+        border-radius: 6px;
+        border: 1px solid #ddd;
+        text-decoration: none;
+        color: #333;
+        font-size: 0.9rem;
+        transition: all 0.2s;
+    }
+
+    .pagination a:hover {
+        background: #3b39fd;
+        color: white;
+        border-color: #3b39fd;
+    }
+
+    .pagination span.active {
+        background: #3b39fd;
+        color: white;
+        border-color: #3b39fd;
+        font-weight: 700;
+    }
+
+    .pagination span.disabled {
+        color: #ccc;
+        cursor: not-allowed;
     }
 </style>
 
@@ -139,6 +176,41 @@
         <div class="empty-state">
             <i class="fas fa-box-open" style="font-size: 3rem; margin-bottom: 15px;"></i>
             <p>Hiện tại không có sản phẩm nào trong danh mục này.</p>
+        </div>
+    }
+
+    @if (ViewBag.TotalPages > 1)
+    {
+        <div class="pagination">
+            @if (ViewBag.CurrentPage > 1)
+            {
+                <a href="?page=@(ViewBag.CurrentPage - 1)@(ViewBag.Keyword != null ? "&keyword=" + ViewBag.Keyword : "")">&#8249; Trước</a>
+            }
+            else
+            {
+                <span class="disabled">&#8249; Trước</span>
+            }
+
+            @for (int i = 1; i <= ViewBag.TotalPages; i++)
+            {
+                if (i == ViewBag.CurrentPage)
+                {
+                    <span class="active">@i</span>
+                }
+                else
+                {
+                    <a href="?page=@i@(ViewBag.Keyword != null ? "&keyword=" + ViewBag.Keyword : "")">@i</a>
+                }
+            }
+
+            @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+            {
+                <a href="?page=@(ViewBag.CurrentPage + 1)@(ViewBag.Keyword != null ? "&keyword=" + ViewBag.Keyword : "")">Sau &#8250;</a>
+            }
+            else
+            {
+                <span class="disabled">Sau &#8250;</span>
+            }
         </div>
     }
 </div>
